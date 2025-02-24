@@ -5,69 +5,64 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 体重记录
+ * 运动种类
  *
  * @author FanK
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class WeightRecordInfo implements Serializable {
+public class SportTypeInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 所属用户
+     * 运动编号
      */
-    private Integer userId;
-
-    /**
-     * 饮水量
-     */
-    private BigDecimal waterAmount;
+    private String code;
 
     /**
      * 运动名称
      */
-    private BigDecimal sportName;
+    private String name;
 
     /**
-     * 运动量
-     */
-    private BigDecimal sportAmount;
-
-    /**
-     * 运动时间
-     */
-    private BigDecimal sportTime;
-
-    /**
-     * 体重
-     */
-    private BigDecimal weight;
-
-    /**
-     * 备注
+     * 运动描述
      */
     private String content;
+
+    /**
+     * 热量
+     */
+    private BigDecimal heat;
+
+    /**
+     * 运动时间（分钟）
+     */
+    private Integer sportTime;
+
+    /**
+     * 图片
+     */
+    private String images;
 
     /**
      * 创建时间
      */
     private String createDate;
 
-    @TableField(exist = false)
-    private String userName;
+    /**
+     * 所属用户
+     */
+    private Integer userId;
 
 
 }
