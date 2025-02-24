@@ -4,11 +4,8 @@
       <div class="top">
         <div class="header">
           <a-row style="width: 368px;margin: 0 auto">
-            <a-col :span="8">
-              <img src="../../../static/img/logo1.png" style="height: 100px;">
-            </a-col>
-            <a-col :span="16">
-              <div style="text-align: left;font-size: 23px;margin-bottom: 10px;font-family: SimHei;margin-top: 30px;color: #0E65BB">尚卿美食网</div>
+            <a-col :span="24">
+              <div style="text-align: left;font-size: 23px;margin-bottom: 10px;font-family: SimHei;margin-top: 30px;color: #0E65BB;text-align: center">饮食健康平台</div>
             </a-col>
           </a-row>
         </div>

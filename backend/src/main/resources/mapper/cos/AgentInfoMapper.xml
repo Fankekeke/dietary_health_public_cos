@@ -2,4 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.AgentInfoMapper">
 
+    <!-- 分页查询代办任务 -->
+    <select id="queryAgentPage" resultType="java.util.LinkedHashMap">
+        select
+            ai.id,
+            ai.user_id,
+            ai.task_title,
+            ai.content,
+            ai.status,
+            ai.create_date,
+            ai.complate_date,
+            ui.name as userName,
+            ui.code as userCode,
+            ui.images as userImages
+        from
+            agent_info ai
+                left join user_info ui on
+                (ui.id = ai.user_id)
+        where
+            1 = 1
+        order by
+            ai.create_date desc
+    </select>
 </mapper>

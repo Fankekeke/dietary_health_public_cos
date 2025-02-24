@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AgentInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IAgentInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class AgentInfoController {
 
     private final IAgentInfoService agentInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页查询代办任务
@@ -64,6 +69,11 @@ public class AgentInfoController {
      */
     @PostMapping
     public R save(AgentInfo agentInfo) {
+        // 设置用户ID
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, agentInfo.getUserId()));
+        if (userInfo != null) {
+            agentInfo.setUserId(userInfo.getId());
+        }
         agentInfo.setComplateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(agentInfoService.save(agentInfo));
     }
