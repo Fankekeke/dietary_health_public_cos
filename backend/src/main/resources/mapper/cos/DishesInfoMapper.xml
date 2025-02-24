@@ -59,7 +59,7 @@
         (ui.id = di.user_id)
         where
         1 = 1
-        and di.user_id != null
+        and di.user_id is not null
         <if test="dishesInfo.code != null and dishesInfo.code != ''">
             AND di.code LIKE CONCAT('%',#{dishesInfo.code},'%')
         </if>

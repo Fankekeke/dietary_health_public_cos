@@ -21,4 +21,13 @@ public interface IDishesInfoService extends IService<DishesInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryDishesPage(Page<DishesInfo> page, DishesInfo dishesInfo);
+
+    /**
+     * 分页查询菜品信息
+     *
+     * @param page       分页对象
+     * @param dishesInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> queryDishesByUserPage(Page<DishesInfo> page, DishesInfo dishesInfo);
 }

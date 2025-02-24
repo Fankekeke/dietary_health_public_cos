@@ -21,4 +21,13 @@ public interface SportTypeInfoMapper extends BaseMapper<SportTypeInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> querySportTypePage(Page<SportTypeInfo> page, @Param("sportTypeInfo") SportTypeInfo sportTypeInfo);
+
+    /**
+     * 分页查询运动种类
+     *
+     * @param page           分页对象
+     * @param sportTypeInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> querySportTypeByUserPage(Page<SportTypeInfo> page, @Param("sportTypeInfo") SportTypeInfo sportTypeInfo);
 }

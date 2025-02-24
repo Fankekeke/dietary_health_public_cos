@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改待办" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="修改运动类型" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,20 +10,58 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="24">
-          <a-form-item label='代办标题' v-bind="formItemLayout">
+        <a-col :span="12">
+          <a-form-item label='运动名称' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'taskTitle',
-            { rules: [{ required: true, message: '请输入代办标题!' }] }
+            'name',
+            { rules: [{ required: true, message: '请输入运动名称!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='热量含量' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'heat',
+            { rules: [{ required: true, message: '请输入热量含量!' }] }
+            ]" :min="0.1" :step="0.1"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='运动时间（分钟）' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'sportTime',
+            { rules: [{ required: true, message: '请输入运动时间!' }] }
+            ]" :min="0.1" :step="0.1"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='运动类型' v-bind="formItemLayout">
+            <a-textarea :rows="6" v-decorator="[
+            'content',
+             { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='待办内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入待办内容!' }] }
-            ]"/>
+          <a-form-item label='图册' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="fileList"
+              @preview="handlePreview"
+              @change="picHandleChange"
+            >
+              <div v-if="fileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+              <img alt="example" style="width: 100%" :src="previewImage" />
+            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
@@ -100,7 +138,7 @@ export default {
     },
     setFormValues ({...bulletin}) {
       this.rowId = bulletin.id
-      let fields = ['taskTitle', 'content', 'uploader']
+      let fields = ['name', 'heat', 'sportTime', 'content']
       let obj = {}
       Object.keys(bulletin).forEach((key) => {
         if (key === 'images') {
@@ -137,7 +175,7 @@ export default {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$put('/cos/agent-info', {
+          this.$put('/cos/sport-type-info', {
             ...values
           }).then((r) => {
             this.reset()

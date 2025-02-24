@@ -2,37 +2,37 @@
   <a-card :bordered="false" class="card-area">
     <div :class="advanced ? 'search' : null">
       <!-- 搜索区域 -->
-      <a-form layout="horizontal">
-        <a-row :gutter="15">
-          <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="标题"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.title"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="内容"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.content"/>
-              </a-form-item>
-            </a-col>
-          </div>
-          <span style="float: right; margin-top: 3px;">
-            <a-button type="primary" @click="search">查询</a-button>
-            <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-          </span>
-        </a-row>
-      </a-form>
+<!--      <a-form layout="horizontal">-->
+<!--        <a-row :gutter="15">-->
+<!--          <div :class="advanced ? null: 'fold'">-->
+<!--            <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="标题"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.title"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
+<!--            <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="内容"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.content"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
+<!--          </div>-->
+<!--          <span style="float: right; margin-top: 3px;">-->
+<!--            <a-button type="primary" @click="search">查询</a-button>-->
+<!--            <a-button style="margin-left: 8px" @click="reset">重置</a-button>-->
+<!--          </span>-->
+<!--        </a-row>-->
+<!--      </a-form>-->
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
-        <a-button @click="batchDelete">删除</a-button>
+<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+<!--        <a-button @click="batchDelete">删除</a-button>-->
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -128,31 +128,31 @@ export default {
     }),
     columns () {
       return [{
-        title: '标题',
-        dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
-      }, {
-        title: '公告内容',
-        dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
-      }, {
-        title: '发布时间',
-        dataIndex: 'createDate',
+        title: '热量',
+        dataIndex: 'heat',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '卡'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '上传人',
-        dataIndex: 'uploader',
+        title: '蛋白质',
+        dataIndex: 'protein',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '克'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '脂肪',
+        dataIndex: 'fat',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '克'
           } else {
             return '- -'
           }
@@ -182,7 +182,7 @@ export default {
     },
     handleBulletinAddSuccess () {
       this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+      this.$message.success('新增营养设定成功')
       this.search()
     },
     edit (record) {
@@ -194,7 +194,7 @@ export default {
     },
     handleBulletinEditSuccess () {
       this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+      this.$message.success('修改营养设定成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -212,7 +212,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/nutrition-rule-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -282,7 +282,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bulletin-info/page', {
+      this.$get('/cos/nutrition-rule-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

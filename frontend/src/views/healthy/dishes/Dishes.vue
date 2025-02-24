@@ -21,14 +21,6 @@
                 <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="商家名称"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.merchantName"/>
-              </a-form-item>
-            </a-col>
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
@@ -39,7 +31,7 @@
     </div>
     <div>
       <div class="operator">
-<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+        <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -147,29 +139,6 @@ export default {
           </a-popover>
         }
       }, {
-        title: '商家名称',
-        ellipsis: true,
-        dataIndex: 'merchantName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '商家图片',
-        dataIndex: 'merchantImages',
-        customRender: (text, record, index) => {
-          if (!record.merchantImages) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.merchantImages.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.merchantImages.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
         title: '原料',
         ellipsis: true,
         dataIndex: 'rawMaterial',
@@ -202,34 +171,31 @@ export default {
           }
         }
       }, {
-        title: '价格',
-        dataIndex: 'unitPrice',
+        title: '热量',
+        dataIndex: 'heat',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '元'
+            return text + '卡'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '状态',
-        dataIndex: 'status',
+        title: '蛋白质',
+        dataIndex: 'protein',
         customRender: (text, row, index) => {
-          switch (text) {
-            case '0':
-              return <a-tag color="red">下架</a-tag>
-            case '1':
-              return <a-tag color="green">上架</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return text + '克'
+          } else {
+            return '- -'
           }
         }
       }, {
-        title: '销量',
-        dataIndex: 'saleNum',
+        title: '脂肪',
+        dataIndex: 'fat',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text
+            return text + '克'
           } else {
             return '- -'
           }

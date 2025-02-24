@@ -26,21 +26,14 @@
         <a-col :span="8"><b>口味：</b>
           {{ dishesData.taste }}
         </a-col>
-        <a-col :span="8"><b>价格：</b>
-          {{ dishesData.unitPrice }} 元
+        <a-col :span="8"><b>创建时间：</b>
+          {{ dishesData.createDate }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>销量：</b>
-          {{ dishesData.saleNum }}
-        </a-col>
-        <a-col :span="8"><b>上架状态：</b>
-          <span v-if="dishesData.status == 0" style="color: red">下架</span>
-          <span v-if="dishesData.status == 1" style="color: green">上架</span>
-        </a-col>
-        <a-col :span="8"><b>创建时间：</b>
-          {{ dishesData.createDate }}
+        <a-col :span="24"><b>备注：</b>
+          {{ dishesData.content }}
         </a-col>
       </a-row>
       <br/>
@@ -53,18 +46,6 @@
         </a-col>
         <a-col :span="8"><b>脂肪：</b>
           {{ dishesData.fat }}
-        </a-col>
-      </a-row>
-      <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>所属商家：</b>
-          {{ dishesData.merchantName }}
-        </a-col>
-        <a-col :span="8"><b>联系人：</b>
-          {{ dishesData.principal }}
-        </a-col>
-        <a-col :span="8"><b>联系方式：</b>
-          {{ dishesData.phone }}
         </a-col>
       </a-row>
       <br/>

@@ -43,25 +43,6 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='价格' v-bind="formItemLayout">
-            <a-input-number style="width: 100%" v-decorator="[
-            'unitPrice',
-            { rules: [{ required: true, message: '请输入价格!' }] }
-            ]" :min="0.1" :step="0.1"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='菜品状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'status',
-              { rules: [{ required: true, message: '请输入菜品状态!' }] }
-              ]">
-              <a-select-option value="0">下架</a-select-option>
-              <a-select-option value="1">上架</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
           <a-form-item label='热量含量' v-bind="formItemLayout">
             <a-input-number style="width: 100%" v-decorator="[
             'heat',

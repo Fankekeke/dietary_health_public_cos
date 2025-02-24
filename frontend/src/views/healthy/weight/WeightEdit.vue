@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改待办" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="修改运动记录" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,19 +10,27 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="24">
-          <a-form-item label='代办标题' v-bind="formItemLayout">
+        <a-col :span="12">
+          <a-form-item label='运动记录标题' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'taskTitle',
-            { rules: [{ required: true, message: '请输入代办标题!' }] }
+            'title',
+            { rules: [{ required: true, message: '请输入名称!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='上传人' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'uploader',
+            { rules: [{ required: true, message: '请输入上传人!' }] }
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='待办内容' v-bind="formItemLayout">
+          <a-form-item label='运动记录内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
             'content',
-             { rules: [{ required: true, message: '请输入待办内容!' }] }
+             { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
@@ -100,7 +108,7 @@ export default {
     },
     setFormValues ({...bulletin}) {
       this.rowId = bulletin.id
-      let fields = ['taskTitle', 'content', 'uploader']
+      let fields = ['title', 'content', 'uploader']
       let obj = {}
       Object.keys(bulletin).forEach((key) => {
         if (key === 'images') {
@@ -137,7 +145,7 @@ export default {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$put('/cos/agent-info', {
+          this.$put('/cos/weight-record-info', {
             ...values
           }).then((r) => {
             this.reset()

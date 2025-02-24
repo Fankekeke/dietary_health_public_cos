@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.SportTypeInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.ISportTypeInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class SportTypeInfoController {
 
     private final ISportTypeInfoService sportTypeInfoService;
+
+    private final IUserInfoService userInfoService;
     
     /**
      * 分页查询运动种类
@@ -32,6 +37,18 @@ public class SportTypeInfoController {
      */
     @GetMapping("/page")
     public R page(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo) {
+        return R.ok(sportTypeInfoService.querySportTypePage(page, sportTypeInfo));
+    }
+
+    /**
+     * 分页查询运动种类
+     *
+     * @param page           分页对象
+     * @param sportTypeInfo 参数
+     * @return 结果
+     */
+    @GetMapping("/page/user")
+    public R querySportTypeByUserPage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo) {
         return R.ok(sportTypeInfoService.querySportTypePage(page, sportTypeInfo));
     }
 
@@ -65,6 +82,13 @@ public class SportTypeInfoController {
     @PostMapping
     public R save(SportTypeInfo sportTypeInfo) {
         sportTypeInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        sportTypeInfo.setCreateDate("ST-" + System.currentTimeMillis());
+        if (sportTypeInfo.getUserId() != null) {
+            UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, sportTypeInfo.getUserId()));
+            if (userInfo != null) {
+                sportTypeInfo.setUserId(userInfo.getId());
+            }
+        }
         return R.ok(sportTypeInfoService.save(sportTypeInfo));
     }
 

@@ -2,4 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.SportTypeInfoMapper">
 
+    <!-- 分页查询运动种类 -->
+    <select id="querySportTypePage" resultType="java.util.LinkedHashMap">
+        select
+            id,
+            code,
+            name,
+            content,
+            heat,
+            sport_time,
+            images,
+            create_date,
+            user_id
+        from
+            sport_type_info
+        where
+            1 = 1
+        <if test="sportTypeInfo.code != null and sportTypeInfo.code != ''">
+            AND code LIKE CONCAT('%',#{sportTypeInfo.code},'%')
+        </if>
+        <if test="sportTypeInfo.name != null and sportTypeInfo.name != ''">
+            AND name LIKE CONCAT('%',#{sportTypeInfo.name},'%')
+        </if>
+        order by
+            create_date desc
+    </select>
+
+    <!-- 分页查询运动种类 -->
+    <select id="querySportTypeByUserPage" resultType="java.util.LinkedHashMap">
+        select
+        sti.id,
+        sti.code,
+        sti.name,
+        sti.content,
+        sti.heat,
+        sti.sport_time,
+        sti.images,
+        sti.create_date,
+        sti.user_id,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
+        from
+        sport_type_info sti
+        left join user_info ui on
+        (ui.id = di.user_id)
+        where
+        1 = 1
+        and sti.user_id is not null
+        <if test="sportTypeInfo.code != null and sportTypeInfo.code != ''">
+            AND sti.code LIKE CONCAT('%',#{sportTypeInfo.code},'%')
+        </if>
+        <if test="sportTypeInfo.name != null and sportTypeInfo.name != ''">
+            AND sti.name LIKE CONCAT('%',#{sportTypeInfo.name},'%')
+        </if>
+        <if test="sportTypeInfo.userId != null and sportTypeInfo.userId != ''">
+            AND ui.user_id = #{sportTypeInfo.userId}
+        </if>
+        order by
+        sti.create_date desc
+    </select>
 </mapper>

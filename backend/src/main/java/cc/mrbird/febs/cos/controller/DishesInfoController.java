@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.DishesInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IDishesInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class DishesInfoController {
 
     private final IDishesInfoService dishesInfoService;
 
+    private final IUserInfoService userInfoService;
+
     /**
      * 分页查询菜品信息
      *
@@ -33,6 +38,18 @@ public class DishesInfoController {
     @GetMapping("/page")
     public R page(Page<DishesInfo> page, DishesInfo dishesInfo) {
         return R.ok(dishesInfoService.queryDishesPage(page, dishesInfo));
+    }
+
+    /**
+     * 根据用户查询菜品信息
+     *
+     * @param page       分页对象
+     * @param dishesInfo 参数
+     * @return 结果
+     */
+    @GetMapping("/page/user")
+    public R queryDishesByUserPage(Page<DishesInfo> page, DishesInfo dishesInfo) {
+        return R.ok(dishesInfoService.queryDishesByUserPage(page, dishesInfo));
     }
 
     /**
@@ -65,6 +82,12 @@ public class DishesInfoController {
     @PostMapping
     public R save(DishesInfo dishesInfo) {
         dishesInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        if (dishesInfo.getUserId() != null) {
+            UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, dishesInfo.getUserId()));
+            if (userInfo != null) {
+                dishesInfo.setUserId(userInfo.getId());
+            }
+        }
         return R.ok(dishesInfoService.save(dishesInfo));
     }
 

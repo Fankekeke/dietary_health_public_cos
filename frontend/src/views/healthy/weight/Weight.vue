@@ -7,18 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="菜品编号"
+                label="所属用户"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.code"/>
+                <a-input v-model="queryParams.userName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="菜品名称"
+                label="内容"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.name"/>
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
           </div>
@@ -31,7 +31,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -44,56 +44,65 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
+        <template slot="titleShow" slot-scope="text, record">
+          <template>
+            <a-tooltip>
+              <template slot="title">
+                {{ record.title }}
+              </template>
+              {{ record.title.slice(0, 8) }} ...
+            </a-tooltip>
+          </template>
+        </template>
+        <template slot="contentShow" slot-scope="text, record">
+          <template>
+            <a-tooltip>
+              <template slot="title">
+                {{ record.content }}
+              </template>
+              {{ record.content.slice(0, 30) }} ...
+            </a-tooltip>
+          </template>
+        </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
-          <a-icon type="file-search" @click="dishesViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
-    <dishes-add
-      v-if="dishesAdd.visiable"
-      @close="handledishesAddClose"
-      @success="handledishesAddSuccess"
-      :dishesAddVisiable="dishesAdd.visiable">
-    </dishes-add>
-    <dishes-edit
-      ref="dishesEdit"
-      @close="handledishesEditClose"
-      @success="handledishesEditSuccess"
-      :dishesEditVisiable="dishesEdit.visiable">
-    </dishes-edit>
-    <dishes-view
-      @close="handledishesViewClose"
-      :dishesShow="dishesView.visiable"
-      :dishesData="dishesView.data">
-    </dishes-view>
+    <bulletin-add
+      v-if="bulletinAdd.visiable"
+      @close="handleBulletinAddClose"
+      @success="handleBulletinAddSuccess"
+      :bulletinAddVisiable="bulletinAdd.visiable">
+    </bulletin-add>
+    <bulletin-edit
+      ref="bulletinEdit"
+      @close="handleBulletinEditClose"
+      @success="handleBulletinEditSuccess"
+      :bulletinEditVisiable="bulletinEdit.visiable">
+    </bulletin-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import dishesAdd from './DishesAdd'
-import dishesEdit from './DishesEdit'
-import dishesView from './DishesView.vue'
+import BulletinAdd from './WeightAdd.vue'
+import BulletinEdit from './WeightEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'dishes',
-  components: {dishesAdd, dishesEdit, dishesView, RangeDate},
+  name: 'Bulletin',
+  components: {BulletinAdd, BulletinEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      dishesAdd: {
+      bulletinAdd: {
         visiable: false
       },
-      dishesEdit: {
+      bulletinEdit: {
         visiable: false
-      },
-      dishesView: {
-        visiable: false,
-        data: null
       },
       queryParams: {},
       filteredInfo: null,
@@ -119,26 +128,6 @@ export default {
     }),
     columns () {
       return [{
-        title: '菜品编号',
-        ellipsis: true,
-        dataIndex: 'code'
-      }, {
-        title: '菜品名称',
-        ellipsis: true,
-        dataIndex: 'name'
-      }, {
-        title: '菜品图片',
-        dataIndex: 'images',
-        customRender: (text, record, index) => {
-          if (!record.images) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
         title: '用户名称',
         ellipsis: true,
         dataIndex: 'userName'
@@ -155,9 +144,9 @@ export default {
           </a-popover>
         }
       }, {
-        title: '原料',
+        title: '发布时间',
+        dataIndex: 'createDate',
         ellipsis: true,
-        dataIndex: 'rawMaterial',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -166,19 +155,20 @@ export default {
           }
         }
       }, {
-        title: '份量',
-        dataIndex: 'portion',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '口味',
+        title: '饮水量',
+        dataIndex: 'waterAmount',
         ellipsis: true,
-        dataIndex: 'taste',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '毫升'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '运动名称',
+        dataIndex: 'sportName',
+        ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -187,8 +177,8 @@ export default {
           }
         }
       }, {
-        title: '热量',
-        dataIndex: 'heat',
+        title: '运动量',
+        dataIndex: 'sportAmount',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '卡'
@@ -197,21 +187,21 @@ export default {
           }
         }
       }, {
-        title: '蛋白质',
-        dataIndex: 'protein',
+        title: '运动时间',
+        dataIndex: 'sportTime',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '克'
+            return text + '分钟'
           } else {
             return '- -'
           }
         }
       }, {
-        title: '脂肪',
-        dataIndex: 'fat',
+        title: '体重',
+        dataIndex: 'weight',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '克'
+            return text + '千克'
           } else {
             return '- -'
           }
@@ -227,13 +217,6 @@ export default {
     this.fetch()
   },
   methods: {
-    dishesViewOpen (row) {
-      this.dishesView.data = row
-      this.dishesView.visiable = true
-    },
-    handledishesViewClose () {
-      this.dishesView.visiable = false
-    },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
@@ -241,26 +224,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.dishesAdd.visiable = true
+      this.bulletinAdd.visiable = true
     },
-    handledishesAddClose () {
-      this.dishesAdd.visiable = false
+    handleBulletinAddClose () {
+      this.bulletinAdd.visiable = false
     },
-    handledishesAddSuccess () {
-      this.dishesAdd.visiable = false
-      this.$message.success('新增菜品成功')
+    handleBulletinAddSuccess () {
+      this.bulletinAdd.visiable = false
+      this.$message.success('新增运动记录成功')
       this.search()
     },
     edit (record) {
-      this.$refs.dishesEdit.setFormValues(record)
-      this.dishesEdit.visiable = true
+      this.$refs.bulletinEdit.setFormValues(record)
+      this.bulletinEdit.visiable = true
     },
-    handledishesEditClose () {
-      this.dishesEdit.visiable = false
+    handleBulletinEditClose () {
+      this.bulletinEdit.visiable = false
     },
-    handledishesEditSuccess () {
-      this.dishesEdit.visiable = false
-      this.$message.success('修改菜品成功')
+    handleBulletinEditSuccess () {
+      this.bulletinEdit.visiable = false
+      this.$message.success('修改运动记录成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -278,7 +261,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/dishes-info/' + ids).then(() => {
+          that.$delete('/cos/weight-record-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -348,8 +331,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      // params.userId = this.currentUser.userId
-      this.$get('/cos/dishes-info/page/user', {
+      this.$get('/cos/weight-record-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

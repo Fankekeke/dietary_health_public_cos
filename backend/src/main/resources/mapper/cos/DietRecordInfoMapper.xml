@@ -25,7 +25,7 @@
         left join dishes_info di on
         (di.id = dri.dishes_id)
         left join user_info ui on
-        (ui.id = ai.user_id)
+        (ui.id = dri.user_id)
         where
         1 = 1
         <if test="dietRecordInfo.dishesName != null and dietRecordInfo.dishesName != ''">

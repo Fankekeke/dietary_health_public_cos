@@ -31,8 +31,8 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
-        <a-button @click="batchDelete">删除</a-button>
+<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+<!--        <a-button @click="batchDelete">删除</a-button>-->
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -45,7 +45,7 @@
                :scroll="{ x: 900 }"
                @change="handleTableChange">
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
+<!--          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>-->
           <a-icon type="file-search" @click="dishesViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
@@ -136,22 +136,6 @@ export default {
               <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
             </template>
             <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-          </a-popover>
-        }
-      }, {
-        title: '用户名称',
-        ellipsis: true,
-        dataIndex: 'userName'
-      }, {
-        title: '用户头像',
-        dataIndex: 'userImages',
-        customRender: (text, record, index) => {
-          if (!record.userImages) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages.split(',')[0] } />
           </a-popover>
         }
       }, {
@@ -348,8 +332,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      // params.userId = this.currentUser.userId
-      this.$get('/cos/dishes-info/page/user', {
+      this.$get('/cos/dishes-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

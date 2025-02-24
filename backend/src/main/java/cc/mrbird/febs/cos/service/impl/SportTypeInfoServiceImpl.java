@@ -27,4 +27,16 @@ public class SportTypeInfoServiceImpl extends ServiceImpl<SportTypeInfoMapper, S
     public IPage<LinkedHashMap<String, Object>> querySportTypePage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo) {
         return baseMapper.querySportTypePage(page, sportTypeInfo);
     }
+
+    /**
+     * 分页查询运动种类
+     *
+     * @param page           分页对象
+     * @param sportTypeInfo 参数
+     * @return 结果
+     */
+    @Override
+    public IPage<LinkedHashMap<String, Object>> querySportTypeByUserPage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo) {
+        return baseMapper.querySportTypeByUserPage(page, sportTypeInfo);
+    }
 }

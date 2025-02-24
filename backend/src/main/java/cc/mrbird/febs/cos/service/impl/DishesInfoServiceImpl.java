@@ -27,4 +27,16 @@ public class DishesInfoServiceImpl extends ServiceImpl<DishesInfoMapper, DishesI
     public IPage<LinkedHashMap<String, Object>> queryDishesPage(Page<DishesInfo> page, DishesInfo dishesInfo) {
         return baseMapper.queryDishesPage(page, dishesInfo);
     }
+
+    /**
+     * 分页查询菜品信息
+     *
+     * @param page       分页对象
+     * @param dishesInfo 参数
+     * @return 结果
+     */
+    @Override
+    public IPage<LinkedHashMap<String, Object>> queryDishesByUserPage(Page<DishesInfo> page, DishesInfo dishesInfo) {
+        return baseMapper.queryDishesByUserPage(page, dishesInfo);
+    }
 }

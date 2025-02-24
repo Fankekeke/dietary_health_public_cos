@@ -41,6 +41,20 @@ public class AgentInfoController {
     }
 
     /**
+     * 完成代办任务
+     *
+     * @param id 主键
+     * @return 结果
+     */
+    @GetMapping("/agent-finish")
+    public R agentFinish(@RequestParam(value = "id", required = true) Integer id) {
+        AgentInfo agentInfo = agentInfoService.getById(id);
+        agentInfo.setStatus("1");
+        agentInfo.setComplateDate(DateUtil.formatDateTime(new Date()));
+        return R.ok(agentInfoService.updateById(agentInfo));
+    }
+
+    /**
      * 查询所有代办任务
      *
      * @return 结果

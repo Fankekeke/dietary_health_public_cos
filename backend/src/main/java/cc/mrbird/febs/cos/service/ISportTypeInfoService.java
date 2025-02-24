@@ -21,4 +21,13 @@ public interface ISportTypeInfoService extends IService<SportTypeInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> querySportTypePage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo);
+
+    /**
+     * 分页查询运动种类
+     *
+     * @param page           分页对象
+     * @param sportTypeInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> querySportTypeByUserPage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo);
 }
