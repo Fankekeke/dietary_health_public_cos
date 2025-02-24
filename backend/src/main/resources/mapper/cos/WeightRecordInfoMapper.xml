@@ -4,6 +4,26 @@
 
     <!-- 分页查询体重记录信息 -->
     <select id="queryWeightPage" resultType="java.util.LinkedHashMap">
-
+        select wri.id,
+        wri.user_id,
+        wri.water_amount,
+        wri.sport_amount,
+        wri.weight,
+        wri.content,
+        wri.create_date,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
+        from weight_record_info wri
+        left join user_info ui on
+        (ui.id = wri.user_id)
+        where 1 = 1
+        <if test="weightRecordInfo.userName != null and weightRecordInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{weightRecordInfo.userName},'%')
+        </if>
+        <if test="weightRecordInfo.userId != null and weightRecordInfo.userId != ''">
+            AND ui.user_id = #{weightRecordInfo.userId}
+        </if>
+        order by wri.create_date desc
     </select>
 </mapper>

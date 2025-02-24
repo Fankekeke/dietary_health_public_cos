@@ -5,20 +5,26 @@
     <!-- 分页查询打卡记录 -->
     <select id="queryAttendancePage" resultType="java.util.LinkedHashMap">
         select
-            ai.id,
-            ai.user_id,
-            ai.put_take_date,
-            ui.name as userName,
-            ui.code as userCode,
-            ui.images as userImages
+        ai.id,
+        ai.user_id,
+        ai.put_take_date,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
         from
-            attendance_info ai
-                left join user_info ui on
-                (ui.id = ai.user_id)
+        attendance_info ai
+        left join user_info ui on
+        (ui.id = ai.user_id)
         where
-            1 = 1
+        1 = 1
+        <if test="attendanceInfo.userName != null and attendanceInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{attendanceInfo.userName},'%')
+        </if>
+        <if test="attendanceInfo.userId != null and attendanceInfo.userId != ''">
+            AND ui.user_id = #{attendanceInfo.userId}
+        </if>
         order by
-            ai.create_date desc
+        ai.create_date desc
     </select>
 
     <!-- 根据用户获取打卡记录 -->

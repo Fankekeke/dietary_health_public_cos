@@ -5,57 +5,75 @@
     <!-- 分页查询菜品信息 -->
     <select id="queryDishesPage" resultType="java.util.LinkedHashMap">
         select
-            id,
-            code,
-            name,
-            content,
-            raw_material,
-            portion,
-            taste,
-            status,
-            create_date,
-            images,
-            heat,
-            protein,
-            fat,
-            user_id
+        id,
+        code,
+        name,
+        content,
+        raw_material,
+        portion,
+        taste,
+        status,
+        create_date,
+        images,
+        heat,
+        protein,
+        fat,
+        user_id
         from
-            dishes_info
+        dishes_info
         where
-            1 = 1
+        1 = 1
+        <if test="dishesInfo.code != null and dishesInfo.code != ''">
+            AND code LIKE CONCAT('%',#{dishesInfo.code},'%')
+        </if>
+        <if test="dishesInfo.name != null and dishesInfo.name != ''">
+            AND name LIKE CONCAT('%',#{dishesInfo.name},'%')
+        </if>
         order by
-            create_date desc
+        create_date desc
     </select>
 
     <!-- 分页查询菜品信息 -->
     <select id="queryDishesByUserPage" resultType="java.util.LinkedHashMap">
         select
-            di.id,
-            di.code,
-            di.name,
-            di.content,
-            di.raw_material,
-            di.portion,
-            di.taste,
-            di.status,
-            di.create_date,
-            di.images,
-            di.heat,
-            di.protein,
-            di.fat,
-            di.user_id,
-            ui.name as userName,
-            ui.code as userCode,
-            ui.images as userImages
+        di.id,
+        di.code,
+        di.name,
+        di.content,
+        di.raw_material,
+        di.portion,
+        di.taste,
+        di.status,
+        di.create_date,
+        di.images,
+        di.heat,
+        di.protein,
+        di.fat,
+        di.user_id,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
         from
-            dishes_info di
-                left join user_info ui on
-                (ui.id = di.user_id)
+        dishes_info di
+        left join user_info ui on
+        (ui.id = di.user_id)
         where
-            1 = 1
-          and di.user_id != null
+        1 = 1
+        and di.user_id != null
+        <if test="dishesInfo.code != null and dishesInfo.code != ''">
+            AND di.code LIKE CONCAT('%',#{dishesInfo.code},'%')
+        </if>
+        <if test="dishesInfo.name != null and dishesInfo.name != ''">
+            AND di.name LIKE CONCAT('%',#{dishesInfo.name},'%')
+        </if>
+        <if test="dishesInfo.userName != null and dishesInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{dishesInfo.userName},'%')
+        </if>
+        <if test="dishesInfo.userId != null and dishesInfo.userId != ''">
+            AND ui.user_id = #{dishesInfo.userId}
+        </if>
         order by
-            create_date desc
+        create_date desc
 
     </select>
 </mapper>

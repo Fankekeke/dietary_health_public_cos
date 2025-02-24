@@ -5,30 +5,39 @@
     <!-- 分页查询饮食记录 -->
     <select id="queryDietRecordPage" resultType="java.util.LinkedHashMap">
         select
-            dri.id,
-            dri.user_id,
-            dri.dishes_id,
-            dri.heat,
-            dri.protein,
-            dri.fat,
-            dri.create_date,
-            di.name as dishesName,
-            di.images as dishesImages,
-            di.heat,
-            di.protein,
-            di.fat,
-            ui.name as userName,
-            ui.code as userCode,
-            ui.images as userImages
+        dri.id,
+        dri.user_id,
+        dri.dishes_id,
+        dri.heat,
+        dri.protein,
+        dri.fat,
+        dri.create_date,
+        di.name as dishesName,
+        di.images as dishesImages,
+        di.heat,
+        di.protein,
+        di.fat,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
         from
-            diet_record_info dri
-                left join dishes_info di on
-                (di.id = dri.dishes_id)
-                left join user_info ui on
-                (ui.id = ai.user_id)
+        diet_record_info dri
+        left join dishes_info di on
+        (di.id = dri.dishes_id)
+        left join user_info ui on
+        (ui.id = ai.user_id)
         where
-            1 = 1
+        1 = 1
+        <if test="dietRecordInfo.dishesName != null and dietRecordInfo.dishesName != ''">
+            AND di.name LIKE CONCAT('%',#{dietRecordInfo.dishesName},'%')
+        </if>
+        <if test="dietRecordInfo.userName != null and dietRecordInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{dietRecordInfo.userName},'%')
+        </if>
+        <if test="dietRecordInfo.userId != null and dietRecordInfo.userId != ''">
+            AND ui.user_id = #{dietRecordInfo.userId}
+        </if>
         order by
-            dri.create_date desc
+        dri.create_date desc
     </select>
 </mapper>

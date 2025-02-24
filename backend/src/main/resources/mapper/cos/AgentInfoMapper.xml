@@ -5,23 +5,32 @@
     <!-- 分页查询代办任务 -->
     <select id="queryAgentPage" resultType="java.util.LinkedHashMap">
         select
-            ai.id,
-            ai.user_id,
-            ai.task_title,
-            ai.content,
-            ai.status,
-            ai.create_date,
-            ai.complate_date,
-            ui.name as userName,
-            ui.code as userCode,
-            ui.images as userImages
+        ai.id,
+        ai.user_id,
+        ai.task_title,
+        ai.content,
+        ai.status,
+        ai.create_date,
+        ai.complate_date,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
         from
-            agent_info ai
-                left join user_info ui on
-                (ui.id = ai.user_id)
+        agent_info ai
+        left join user_info ui on
+        (ui.id = ai.user_id)
         where
-            1 = 1
+        1 = 1
+        <if test="agentInfo.taskTitle != null and agentInfo.taskTitle != ''">
+            AND ai.task_title LIKE CONCAT('%',#{agentInfo.taskTitle},'%')
+        </if>
+        <if test="agentInfo.userName != null and agentInfo.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{agentInfo.userName},'%')
+        </if>
+        <if test="agentInfo.userId != null and agentInfo.userId != ''">
+            AND ui.user_id = #{agentInfo.userId}
+        </if>
         order by
-            ai.create_date desc
+        ai.create_date desc
     </select>
 </mapper>

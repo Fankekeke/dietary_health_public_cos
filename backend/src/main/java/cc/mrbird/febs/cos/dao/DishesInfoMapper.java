@@ -21,4 +21,13 @@ public interface DishesInfoMapper extends BaseMapper<DishesInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryDishesPage(Page<DishesInfo> page, @Param("dishesInfo") DishesInfo dishesInfo);
+
+    /**
+     * 分页查询菜品信息
+     *
+     * @param page       分页对象
+     * @param dishesInfo 参数
+     * @return 结果
+     */
+    IPage<LinkedHashMap<String, Object>> queryDishesByUserPage(Page<DishesInfo> page, @Param("dishesInfo") DishesInfo dishesInfo);
 }
