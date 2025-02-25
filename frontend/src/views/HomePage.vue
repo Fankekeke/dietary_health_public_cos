@@ -69,6 +69,9 @@
             </a-row>
           </div>
         </a-col>
+        <a-col :span="24">
+          <home v-if="user.roleId == 75"/>
+        </a-col>
       </a-card>
     </a-row>
     <a-row :gutter="8" class="count-info">
@@ -162,7 +165,13 @@
               :data-source="replyList"
             >
               <a-list-item slot="renderItem" slot-scope="item, index">
-                <a-comment :author="item.username" shape="square" :avatar="'http://127.0.0.1:9527/imagesWeb/' + item.images">
+                <a-comment :author="item.username" shape="square">
+                  <a-avatar
+                    slot="avatar"
+                    :src="'http://127.0.0.1:9527/imagesWeb/' + item.images"
+                    alt="Han Solo"
+                    @click="dishesCheck(item.userId)"
+                  />
                   <template slot="actions">
                     <span @click="replyUserAdd(item)">回复</span>
                   </template>
@@ -189,6 +198,17 @@
         </div>
       </a-card>
     </a-row>
+    <a-modal v-model="userDishesShow" title="用户食谱" @cancel="userDishesShow = false" :width="1000">
+      <a-table ref="TableInfo"
+               :columns="columns"
+               :rowKey="record => record.id"
+               :dataSource="userDishesList"
+               :scroll="{ x: 900 }">
+        <template slot="operation" slot-scope="text, record">
+          <a-icon type="retweet" @click="dishesViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
+        </template>
+      </a-table>
+    </a-modal>
     <post-add
       v-if="postAdd.visiable"
       @close="handlepostAddClose"
@@ -217,6 +237,7 @@ import PostEdit from './admin/post/PostEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 import ClothesView from './admin/clothes/ClothesView.vue'
+import Home from './user/home/Home.vue'
 moment.locale('zh-cn')
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
@@ -229,9 +250,10 @@ function getBase64 (file) {
 
 export default {
   name: 'HomePage',
-  components: {ClothesView, HeadInfo, PostAdd, PostEdit},
+  components: {Home, ClothesView, HeadInfo, PostAdd, PostEdit},
   data () {
     return {
+      userDishesShow: false,
       newsPage: 0,
       newsContent: '',
       newsList: [],
@@ -255,6 +277,7 @@ export default {
       },
       loading: false,
       fileList: [],
+      userDishesList: [],
       previewVisible: false,
       previewImage: '',
       replyContent: '',
@@ -289,9 +312,111 @@ export default {
     }),
     avatar () {
       return `static/avatar/${this.user.avatar}`
+    },
+    columns () {
+      return [{
+        title: '菜品编号',
+        ellipsis: true,
+        dataIndex: 'code'
+      }, {
+        title: '菜品名称',
+        ellipsis: true,
+        dataIndex: 'name'
+      }, {
+        title: '菜品图片',
+        dataIndex: 'images',
+        customRender: (text, record, index) => {
+          if (!record.images) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
+          </a-popover>
+        }
+      }, {
+        title: '原料',
+        ellipsis: true,
+        dataIndex: 'rawMaterial',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '份量',
+        dataIndex: 'portion',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '口味',
+        ellipsis: true,
+        dataIndex: 'taste',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '热量',
+        dataIndex: 'heat',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '卡'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '蛋白质',
+        dataIndex: 'protein',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '克'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '脂肪',
+        dataIndex: 'fat',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '克'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        scopedSlots: {customRender: 'operation'}
+      }]
     }
   },
   methods: {
+    dishesViewOpen (row) {
+      row.userId = this.user.userId
+      this.$post(`/cos/dishes-info/saveByUser`, row).then((r) => {
+        this.$message.success('添加食谱成功！')
+        this.userDishesShow = false
+      })
+    },
+    dishesCheck (userId) {
+      this.$get(`/cos/dishes-info/queryDishesByUserIdCheck`, {userId}).then((r) => {
+        this.userDishesList = r.data.data
+        this.userDishesShow = true
+      })
+    },
     selectHomeImages () {
       this.$get(`/cos/home-info/data`).then((r) => {
         this.homeImage = r.data.home.images.split(',')

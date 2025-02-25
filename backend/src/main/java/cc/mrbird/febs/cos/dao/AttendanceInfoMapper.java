@@ -30,4 +30,11 @@ public interface AttendanceInfoMapper extends BaseMapper<AttendanceInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> queryAttendanceRecordByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    Integer queryTodayCheck(@Param("userId") Integer userId, @Param("createDate") String createDate);
 }

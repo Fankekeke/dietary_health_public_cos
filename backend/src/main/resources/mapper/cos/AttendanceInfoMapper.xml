@@ -29,16 +29,32 @@
 
     <!-- 根据用户获取打卡记录 -->
     <select id="queryAttendanceRecordByUserId" resultType="java.util.LinkedHashMap">
-        SELECT user_id,
-               put_take_date,
-               checked,
-               @pre_check :=
-IF (checked, @pre_check + 1, 0) AS 'continue_check_in'
+        SELECT ai.id,
+        ai.user_id,
+        ai.put_take_date
         FROM
-            attendance_info, (SELECT @pre_check := 0) init
+        attendance_info ai
+        left join user_info ui on
+        (ui.id = ai.user_id)
         WHERE
-            1 = 1
+        1 = 1
+        <if test="userId != null and userId != ''">
+            AND ui.user_id = #{userId}
+        </if>
         ORDER BY
-            user_id
+        user_id
+    </select>
+
+    <!-- 校验今日是否已经打卡 -->
+    <select id="queryTodayCheck" resultType="java.lang.Integer">
+        select count(1) from attendance_info ai
+        left join user_info ui on
+        (ui.id = ai.user_id)
+        where
+        1 = 1
+        <if test="userId != null and userId != ''">
+            AND ui.user_id = #{userId}
+        </if>
+        AND date_format(ai.put_take_date, '%Y-%m-%d') = date_format(#{createDate}, '%Y-%m-%d')
     </select>
 </mapper>

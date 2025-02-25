@@ -29,4 +29,12 @@ public interface IWeightRecordInfoService extends IService<WeightRecordInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> selectRateWithDays(Integer userId);
+
+    /**
+     * 查询今日摄入量
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> queryHeatByUserToday(Integer userId);
 }

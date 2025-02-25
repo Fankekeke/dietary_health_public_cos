@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AttendanceInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IAttendanceInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class AttendanceInfoController {
 
     private final IAttendanceInfoService attendanceInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页查询打卡记录
@@ -68,6 +73,16 @@ public class AttendanceInfoController {
     }
 
     /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryTodayCheck")
+    public R queryTodayCheck(Integer userId) {
+        return R.ok(attendanceInfoService.queryTodayCheck(userId, DateUtil.formatDate(new Date())));
+    }
+
+    /**
      * 新增打卡记录
      *
      * @param attendanceInfo 参数
@@ -75,6 +90,11 @@ public class AttendanceInfoController {
      */
     @PostMapping
     public R save(AttendanceInfo attendanceInfo) {
+        // 设置用户ID
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, attendanceInfo.getUserId()));
+        if (userInfo != null) {
+            attendanceInfo.setUserId(userInfo.getId());
+        }
         attendanceInfo.setPutTakeDate(DateUtil.formatDateTime(new Date()));
         return R.ok(attendanceInfoService.save(attendanceInfo));
     }

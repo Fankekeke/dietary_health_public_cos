@@ -73,6 +73,18 @@ public class DishesInfoController {
     }
 
     /**
+     * 查询用户所选的菜品
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryDishesByUserIdCheck")
+    public R queryDishesByUserIdCheck(Integer userId) {
+        List<DishesInfo> userDishesList = dishesInfoService.queryDishesByUserId(userId);
+        return R.ok(userDishesList);
+    }
+
+    /**
      * 查询所有菜品信息
      *
      * @return 结果
@@ -101,6 +113,26 @@ public class DishesInfoController {
      */
     @PostMapping
     public R save(DishesInfo dishesInfo) {
+        dishesInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        if (dishesInfo.getUserId() != null) {
+            UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, dishesInfo.getUserId()));
+            if (userInfo != null) {
+                dishesInfo.setUserId(userInfo.getId());
+            }
+        }
+        return R.ok(dishesInfoService.save(dishesInfo));
+    }
+
+    /**
+     * 新增菜品信息
+     *
+     * @param dishesInfo 参数
+     * @return 结果
+     */
+    @PostMapping("/saveByUser")
+    public R saveByUser(DishesInfo dishesInfo) {
+        dishesInfo.setId(null);
+        dishesInfo.setContent("0");
         dishesInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         if (dishesInfo.getUserId() != null) {
             UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, dishesInfo.getUserId()));

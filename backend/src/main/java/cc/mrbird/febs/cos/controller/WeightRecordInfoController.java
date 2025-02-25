@@ -52,7 +52,28 @@ public class WeightRecordInfoController {
      */
     @GetMapping("/selectRateWithDays")
     public R selectRateWithDays(Integer userId) {
+        // 设置用户ID
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId));
+        if (userInfo != null) {
+            userId = userInfo.getId();
+        }
         return R.ok(weightRecordInfoService.selectRateWithDays(userId));
+    }
+
+    /**
+     * 查询今日摄入量
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryHeatByUserToday")
+    public R queryHeatByUserToday(Integer userId) {
+        // 设置用户ID
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId));
+        if (userInfo != null) {
+            userId = userInfo.getId();
+        }
+        return R.ok(weightRecordInfoService.queryHeatByUserToday(userId));
     }
 
     /**

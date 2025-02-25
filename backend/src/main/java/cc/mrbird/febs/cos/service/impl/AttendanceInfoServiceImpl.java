@@ -39,4 +39,14 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
     public List<LinkedHashMap<String, Object>> queryAttendanceRecordByUserId(Integer userId) {
         return baseMapper.queryAttendanceRecordByUserId(userId);
     }
+
+    /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public Integer queryTodayCheck(Integer userId, String createDate) {
+        return baseMapper.queryTodayCheck(userId, createDate);
+    }
 }
