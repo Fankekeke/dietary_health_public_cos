@@ -21,4 +21,12 @@ public interface IWeightRecordInfoService extends IService<WeightRecordInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryWeightPage(Page<WeightRecordInfo> page, WeightRecordInfo weightRecordInfo);
+
+    /**
+     * 获取数据统计
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectRateWithDays(Integer userId);
 }

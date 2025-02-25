@@ -31,4 +31,122 @@
         </if>
         order by wri.create_date desc
     </select>
+
+    <!-- 十天内卡路里摄入统计 -->
+    <select id="selectCaloriesWithinDays" resultType="java.util.LinkedHashMap">
+        SELECT
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        IFNULL(SUM(oi.heat), 0) AS amount
+        FROM
+        (
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN diet_record_info oi ON (
+        DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
+        <if test="userId != null">
+            AND oi.user_id = #{userId}
+        </if>
+        )
+        GROUP BY
+        days
+        ORDER BY
+        days ASC
+    </select>
+
+    <!-- 十天内卡路里消耗统计 -->
+    <select id="selectCaloriesWithoutDays" resultType="java.util.LinkedHashMap">
+        SELECT
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        IFNULL(SUM(oi.sport_amount), 0) AS amount
+        FROM
+        (
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN weight_record_info oi ON (
+        DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
+        <if test="userId != null">
+            AND oi.user_id = #{userId}
+        </if>
+        )
+        GROUP BY
+        days
+        ORDER BY
+        days ASC
+    </select>
+
+    <!-- 十天内体重统计 -->
+    <select id="selectWeightWithinDays" resultType="java.util.LinkedHashMap">
+        SELECT
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        max( oi.create_date ),
+        oi.weight
+        FROM
+        (
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN weight_record_info oi ON ( DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days,
+        '%Y-%m-%d' )
+        <if test="userId != null">
+            AND oi.user_id = #{userId}
+        </if>
+        )
+        GROUP BY
+        days
+        ORDER BY
+        days ASC
+    </select>
 </mapper>

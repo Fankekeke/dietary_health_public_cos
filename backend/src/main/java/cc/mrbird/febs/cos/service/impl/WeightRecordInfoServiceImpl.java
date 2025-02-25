@@ -27,4 +27,23 @@ public class WeightRecordInfoServiceImpl extends ServiceImpl<WeightRecordInfoMap
     public IPage<LinkedHashMap<String, Object>> queryWeightPage(Page<WeightRecordInfo> page, WeightRecordInfo weightRecordInfo) {
         return baseMapper.queryWeightPage(page, weightRecordInfo);
     }
+
+    /**
+     * 获取数据统计
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> selectRateWithDays(Integer userId) {
+        // 返回数据
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
+            {
+                put("caloriesIn", baseMapper.selectCaloriesWithinDays(userId));
+                put("caloriesOut", baseMapper.selectCaloriesWithoutDays(userId));
+                put("weight", baseMapper.selectWeightWithinDays(userId));
+            }
+        };
+        return result;
+    }
 }

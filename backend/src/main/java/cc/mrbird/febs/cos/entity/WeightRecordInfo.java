@@ -39,7 +39,7 @@ public class WeightRecordInfo implements Serializable {
     /**
      * 运动名称
      */
-    private BigDecimal sportName;
+    private String sportName;
 
     /**
      * 运动量
@@ -49,7 +49,7 @@ public class WeightRecordInfo implements Serializable {
     /**
      * 运动时间
      */
-    private BigDecimal sportTime;
+    private Integer sportTime;
 
     /**
      * 体重

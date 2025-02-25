@@ -28,14 +28,14 @@ public interface WeightRecordInfoMapper extends BaseMapper<WeightRecordInfo> {
      *
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> selectCaloriesInWithinDays(@Param("userId") Integer userId);
+    List<LinkedHashMap<String, Object>> selectCaloriesWithinDays(@Param("userId") Integer userId);
 
     /**
      * 十天内卡路里消耗统计
      *
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> selectCaloriesWithinDays(@Param("userId") Integer userId);
+    List<LinkedHashMap<String, Object>> selectCaloriesWithoutDays(@Param("userId") Integer userId);
 
     /**
      * 十天内体重统计
