@@ -3,8 +3,13 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.DietRecordInfo;
+import cc.mrbird.febs.cos.entity.DishesInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IDietRecordInfoService;
+import cc.mrbird.febs.cos.service.IDishesInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,10 @@ import java.util.List;
 public class DietRecordInfoController {
 
     private final IDietRecordInfoService dietRecordInfoService;
+
+    private final IDishesInfoService dishesInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页查询饮食记录
@@ -65,6 +74,20 @@ public class DietRecordInfoController {
     @PostMapping
     public R save(DietRecordInfo dietRecordInfo) {
         dietRecordInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 获取菜品信息
+        DishesInfo dishesInfo = dishesInfoService.getById(dietRecordInfo.getDishesId());
+        if (dishesInfo != null) {
+            dietRecordInfo.setHeat(dishesInfo.getHeat());
+            dietRecordInfo.setProtein(dishesInfo.getProtein());
+            dietRecordInfo.setFat(dishesInfo.getFat());
+        }
+
+        if (dietRecordInfo.getUserId() != null) {
+            UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, dietRecordInfo.getUserId()));
+            if (userInfo != null) {
+                dietRecordInfo.setUserId(userInfo.getId());
+            }
+        }
         return R.ok(dietRecordInfoService.save(dietRecordInfo));
     }
 

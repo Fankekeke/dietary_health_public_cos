@@ -30,4 +30,5 @@ public interface SportTypeInfoMapper extends BaseMapper<SportTypeInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> querySportTypeByUserPage(Page<SportTypeInfo> page, @Param("sportTypeInfo") SportTypeInfo sportTypeInfo);
+
 }

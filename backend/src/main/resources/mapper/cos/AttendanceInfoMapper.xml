@@ -24,7 +24,7 @@
             AND ui.user_id = #{attendanceInfo.userId}
         </if>
         order by
-        ai.create_date desc
+        ai.put_take_date desc
     </select>
 
     <!-- 根据用户获取打卡记录 -->

@@ -1,47 +1,67 @@
 <template>
-  <a-modal v-model="show" title="修改运动记录" @cancel="onClose" :width="450">
+  <a-modal v-model="show" title="新增运动类型" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
       </a-button>
       <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
-        修改
+        提交
       </a-button>
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
+        <a-col :span="12">
+          <a-form-item label='运动名称' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'name',
+            { rules: [{ required: true, message: '请输入运动名称!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='热量含量' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'heat',
+            { rules: [{ required: true, message: '请输入热量含量!' }] }
+            ]" :min="0.1" :step="0.1"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='运动时间（分钟）' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'sportTime',
+            { rules: [{ required: true, message: '请输入运动时间!' }] }
+            ]" :min="0.1" :step="0.1"/>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='运动类型' v-bind="formItemLayout">
-            <a-select v-decorator="[
-            'sportId',
-            { rules: [{ required: true, message: '请输入名称!' }] }
-            ]">
-              <a-select-option v-for="(item, index) in sportList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='饮水量' v-bind="formItemLayout">
-            <a-input-number style="width: 100%" v-decorator="[
-            'waterAmount',
-            { rules: [{ required: true, message: '请输入饮水量!' }] }
-            ]" :min="1" :step="1"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='体重' v-bind="formItemLayout">
-            <a-input-number style="width: 100%" v-decorator="[
-            'weight',
-            { rules: [{ required: true, message: '请输入体重!' }] }
-            ]" :min="1" :step="1"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='运动记录内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
             'content',
              { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='图册' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="fileList"
+              @preview="handlePreview"
+              @change="picHandleChange"
+            >
+              <div v-if="fileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+              <img alt="example" style="width: 100%" :src="previewImage" />
+            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
@@ -64,9 +84,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinEdit',
+  name: 'BulletinAdd',
   props: {
-    bulletinEditVisiable: {
+    bulletinAddVisiable: {
       default: false
     }
   },
@@ -76,7 +96,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinEditVisiable
+        return this.bulletinAddVisiable
       },
       set: function () {
       }
@@ -84,25 +104,15 @@ export default {
   },
   data () {
     return {
-      rowId: null,
       formItemLayout,
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
-      sportList: [],
       previewVisible: false,
       previewImage: ''
     }
   },
-  mounted () {
-    this.querySportByUserId()
-  },
   methods: {
-    querySportByUserId () {
-      this.$get(`/cos/sport-type-info//list/all`, {userId: this.currentUser.userId}).then((r) => {
-        this.sportList = r.data.data
-      })
-    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -116,31 +126,6 @@ export default {
     picHandleChange ({ fileList }) {
       this.fileList = fileList
     },
-    imagesInit (images) {
-      if (images !== null && images !== '') {
-        let imageList = []
-        images.split(',').forEach((image, index) => {
-          imageList.push({uid: index, name: image, status: 'done', url: 'http://127.0.0.1:9527/imagesWeb/' + image})
-        })
-        this.fileList = imageList
-      }
-    },
-    setFormValues ({...bulletin}) {
-      this.rowId = bulletin.id
-      let fields = ['title', 'content', 'uploader']
-      let obj = {}
-      Object.keys(bulletin).forEach((key) => {
-        if (key === 'images') {
-          this.fileList = []
-          this.imagesInit(bulletin['images'])
-        }
-        if (fields.indexOf(key) !== -1) {
-          this.form.getFieldDecorator(key)
-          obj[key] = bulletin[key]
-        }
-      })
-      this.form.setFieldsValue(obj)
-    },
     reset () {
       this.loading = false
       this.form.resetFields()
@@ -153,18 +138,14 @@ export default {
       // 获取图片List
       let images = []
       this.fileList.forEach(image => {
-        if (image.response !== undefined) {
-          images.push(image.response)
-        } else {
-          images.push(image.name)
-        }
+        images.push(image.response)
       })
       this.form.validateFields((err, values) => {
-        values.id = this.rowId
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
+          values.userId = this.currentUser.userId
           this.loading = true
-          this.$put('/cos/weight-record-info', {
+          this.$post('/cos/sport-type-info', {
             ...values
           }).then((r) => {
             this.reset()

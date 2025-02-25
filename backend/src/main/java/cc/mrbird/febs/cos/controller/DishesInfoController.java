@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.DishesInfo;
 import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IDishesInfoService;
 import cc.mrbird.febs.cos.service.IUserInfoService;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,6 +39,25 @@ public class DishesInfoController {
     @GetMapping("/page")
     public R page(Page<DishesInfo> page, DishesInfo dishesInfo) {
         return R.ok(dishesInfoService.queryDishesPage(page, dishesInfo));
+    }
+
+    /**
+     * 根据用户查询菜品信息
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @GetMapping("/list/all")
+    public R queryDishesByUserId(Integer userId) {
+        List<DishesInfo> dishesInfoList = dishesInfoService.list(Wrappers.<DishesInfo>lambdaQuery().isNull(DishesInfo::getUserId));
+        for (DishesInfo dishesInfo1 : dishesInfoList) {
+            dishesInfo1.setUserName("系统食谱");
+        }
+        List<DishesInfo> userDishesList = dishesInfoService.queryDishesByUserId(userId);
+
+        // dishesInfoList和userDishesList合并
+        dishesInfoList.addAll(userDishesList);
+        return R.ok(dishesInfoList);
     }
 
     /**

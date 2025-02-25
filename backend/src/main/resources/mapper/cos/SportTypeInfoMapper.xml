@@ -5,19 +5,20 @@
     <!-- 分页查询运动种类 -->
     <select id="querySportTypePage" resultType="java.util.LinkedHashMap">
         select
-            id,
-            code,
-            name,
-            content,
-            heat,
-            sport_time,
-            images,
-            create_date,
-            user_id
+        id,
+        code,
+        name,
+        content,
+        heat,
+        sport_time,
+        images,
+        create_date,
+        user_id
         from
-            sport_type_info
+        sport_type_info
         where
-            1 = 1
+        1 = 1
+        and user_id is null
         <if test="sportTypeInfo.code != null and sportTypeInfo.code != ''">
             AND code LIKE CONCAT('%',#{sportTypeInfo.code},'%')
         </if>
@@ -25,7 +26,7 @@
             AND name LIKE CONCAT('%',#{sportTypeInfo.name},'%')
         </if>
         order by
-            create_date desc
+        create_date desc
     </select>
 
     <!-- 分页查询运动种类 -->
@@ -46,7 +47,7 @@
         from
         sport_type_info sti
         left join user_info ui on
-        (ui.id = di.user_id)
+        (ui.id = sti.user_id)
         where
         1 = 1
         and sti.user_id is not null

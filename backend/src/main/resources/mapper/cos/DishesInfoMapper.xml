@@ -23,6 +23,7 @@
         dishes_info
         where
         1 = 1
+        and user_id is null
         <if test="dishesInfo.code != null and dishesInfo.code != ''">
             AND code LIKE CONCAT('%',#{dishesInfo.code},'%')
         </if>
@@ -75,5 +76,39 @@
         order by
         create_date desc
 
+    </select>
+
+    <!-- 根据用户查询菜品信息 -->
+    <select id="queryDishesByUserId" resultType="cc.mrbird.febs.cos.entity.DishesInfo">
+        select
+        di.id,
+        di.code,
+        di.name,
+        di.content,
+        di.raw_material,
+        di.portion,
+        di.taste,
+        di.status,
+        di.create_date,
+        di.images,
+        di.heat,
+        di.protein,
+        di.fat,
+        di.user_id,
+        ui.name as userName,
+        ui.code as userCode,
+        ui.images as userImages
+        from
+        dishes_info di
+        left join user_info ui on
+        (ui.id = di.user_id)
+        where
+        1 = 1
+        and di.user_id is not null
+        <if test="userId != null and userId != ''">
+            AND ui.user_id = #{userId}
+        </if>
+        order by
+        create_date desc
     </select>
 </mapper>

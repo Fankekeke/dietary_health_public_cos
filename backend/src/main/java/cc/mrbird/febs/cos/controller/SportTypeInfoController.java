@@ -2,6 +2,7 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.DishesInfo;
 import cc.mrbird.febs.cos.entity.SportTypeInfo;
 import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.ISportTypeInfoService;
@@ -41,6 +42,24 @@ public class SportTypeInfoController {
     }
 
     /**
+     * 根据用户查询运动种类信息
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @GetMapping("/list/all")
+    public R querySportByUserId(Integer userId) {
+        List<SportTypeInfo> sportTypeInfoList = sportTypeInfoService.list(Wrappers.<SportTypeInfo>lambdaQuery().isNull(SportTypeInfo::getUserId));
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId));
+        if (userInfo != null) {
+            List<SportTypeInfo> sportTypeInfoList1 = sportTypeInfoService.list(Wrappers.<SportTypeInfo>lambdaQuery().eq(SportTypeInfo::getUserId, userInfo.getId()));
+            sportTypeInfoList.addAll(sportTypeInfoList1);
+        }
+
+        return R.ok(sportTypeInfoList);
+    }
+
+    /**
      * 分页查询运动种类
      *
      * @param page           分页对象
@@ -49,7 +68,7 @@ public class SportTypeInfoController {
      */
     @GetMapping("/page/user")
     public R querySportTypeByUserPage(Page<SportTypeInfo> page, SportTypeInfo sportTypeInfo) {
-        return R.ok(sportTypeInfoService.querySportTypePage(page, sportTypeInfo));
+        return R.ok(sportTypeInfoService.querySportTypeByUserPage(page, sportTypeInfo));
     }
 
     /**

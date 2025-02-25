@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增饮食" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增饮食" @cancel="onClose" :width="450">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,28 +10,14 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="12">
-          <a-form-item label='饮食标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'uploader',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
         <a-col :span="24">
-          <a-form-item label='饮食内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
+          <a-form-item label='餐品' v-bind="formItemLayout">
+            <a-select v-decorator="[
+            'dishesId',
+            { rules: [{ required: true, message: '请输入名称!' }] }
+            ]">
+              <a-select-option v-for="(item, index) in dishesList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
       </a-row>
@@ -78,11 +64,20 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
+      dishesList: [],
       previewVisible: false,
       previewImage: ''
     }
   },
+  mounted () {
+    this.queryDishesByUserId()
+  },
   methods: {
+    queryDishesByUserId () {
+      this.$get(`/cos/dishes-info//list/all`, {userId: this.currentUser.userId}).then((r) => {
+        this.dishesList = r.data.data
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },

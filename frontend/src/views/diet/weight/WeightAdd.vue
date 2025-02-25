@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增运动记录" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增运动记录" @cancel="onClose" :width="450">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,20 +10,30 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="12">
-          <a-form-item label='运动记录标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'title',
+        <a-col :span="24">
+          <a-form-item label='运动类型' v-bind="formItemLayout">
+            <a-select v-decorator="[
+            'sportId',
             { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
+            ]">
+              <a-select-option v-for="(item, index) in sportList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'uploader',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
-            ]"/>
+        <a-col :span="24">
+          <a-form-item label='饮水量' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'waterAmount',
+            { rules: [{ required: true, message: '请输入饮水量!' }] }
+            ]" :min="1" :step="1"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='体重' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'weight',
+            { rules: [{ required: true, message: '请输入体重!' }] }
+            ]" :min="1" :step="1"/>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -78,11 +88,20 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
+      sportList: [],
       previewVisible: false,
       previewImage: ''
     }
   },
+  mounted () {
+    this.querySportByUserId()
+  },
   methods: {
+    querySportByUserId () {
+      this.$get(`/cos/sport-type-info//list/all`, {userId: this.currentUser.userId}).then((r) => {
+        this.sportList = r.data.data
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },
