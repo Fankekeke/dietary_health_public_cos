@@ -113,6 +113,7 @@ public class DishesInfoController {
      */
     @PostMapping
     public R save(DishesInfo dishesInfo) {
+        dishesInfo.setCode("DIS-" + System.currentTimeMillis());
         dishesInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         if (dishesInfo.getUserId() != null) {
             UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, dishesInfo.getUserId()));
@@ -131,6 +132,7 @@ public class DishesInfoController {
      */
     @PostMapping("/saveByUser")
     public R saveByUser(DishesInfo dishesInfo) {
+        dishesInfo.setCode("DIS-" + System.currentTimeMillis());
         dishesInfo.setId(null);
         dishesInfo.setContent("0");
         dishesInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
