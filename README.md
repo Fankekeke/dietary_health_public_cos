@@ -1,40 +1,17 @@
-### 基于SpringBoot + Vue的饮食监控管理系统.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-膳食营养分析、智能热量追踪、健康食谱定制、营养摄入监控
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
 
-###### 管理员：
-用户管理 、消息管理 、公告管理 、贴子管理 、敏感词管理 、模块管理 、消息回复 、蔬菜百科 、留言板 、首页管理 、饮食健康 、菜品管理 、用户菜品 、代办任务 、饮食记录 、营养设定 、运动种类 、运动记录 、打卡记录 、用户运动、数据统计。
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-###### 用户：
-账户注册登录、密码修改、我的关注 、我的收藏 、我的贴子 、系统消息 、留言板 、我的菜品 、系统食谱 、我的待办 、饮食记录 、运动订阅 、运动记录 、打卡记录。
+# 基于 SpringBoot + Vue + MQTT 的饮食监控管理系统
 
-##### 饮食与营养管理
-###### 菜品管理/食谱： 维护详尽的菜品库与科学食谱，为用户提供专业的营养摄入参考方案。
+饮食记录 · 运动打卡 · 营养分析 · 系统食谱 · 蔬菜百科 · 社区互动 · 敏感词过滤 · 数据统计
 
-###### 用户菜品/记录： 用户记录每日饮食内容，系统自动同步饮食数据，支持个性化菜谱定制。
-
-###### 营养设定/百科： 管理员设定营养摄入标准并维护蔬菜百科，为用户科普健康的饮食知识。
-
-##### 运动与健康追踪
-###### 运动种类/订阅： 预设多种运动类型供用户选择订阅，构建多元化的个人健康提升计划。
-
-###### 运动/打卡记录： 实时记录运动轨迹与打卡数据，通过量化指标直观展示用户身体状态变化。
-
-###### 用户运动管理： 管理员监控全平台用户的运动趋势，提供科学的运动指导与任务监督。
-
-##### 内容安全与互动社区
-###### 贴子/留言管理： 提供分享交流的空间，支持发布心得与反馈，营造积极的健康社交氛围。
-
-###### 敏感词/模块管理： 实时过滤不良信息并优化功能版块配置，确保社区环境绿色合规。
-
-###### 消息管理/回复： 处理用户咨询并推送系统提醒，保障医患或平台与用户间的沟通效率。
-
-##### 个人事务与提醒体系
-###### 待办任务/订阅： 用户规划健康日程，系统定时提醒饮食补给与运动任务，培养良好习惯。
-
-###### 关注/收藏/首页： 支持用户收藏优质内容并关注好友，通过首页管理展示最核心的健康动态。
+本项目是一套面向个人健康饮食与运动管理的数字化监控平台，采用前后端分离架构，覆盖**管理员**与**用户**两类角色。系统围绕"饮食记录、运动记录、打卡追踪、营养设定、菜品管理、系统食谱、蔬菜百科、社区论坛、敏感词过滤、消息通知、留言板、数据统计"等核心业务设计，支持从用户记录每日饮食、订阅运动计划、打卡追踪，到管理员全平台监管、内容运营、数据统计的全链路数字化运营，同时融入社区互动与营养分析功能，构建"饮食+运动+社交"一体化的健康管理平台。
 
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -42,24 +19,143 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
 
-平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件) + 百度地图 API
 
 平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
+
+---
+
+## 核心特性
+
+- **饮食记录与营养分析**：用户可记录每日三餐及加餐，系统自动计算热量、蛋白质、脂肪、碳水化合物等营养素摄入量，生成营养摄入报告与饮食结构分析，帮助用户了解饮食健康状况。
+- **运动订阅与打卡追踪**：支持用户订阅运动种类（如跑步、游泳、瑜伽、健身等），记录运动时长与消耗卡路里，支持每日打卡，生成运动趋势图表，激励用户坚持运动习惯。
+- **系统食谱与菜品管理**：管理员维护菜品库，包括菜品名称、分类、食材、热量、营养元素、烹饪步骤、图片等；用户可浏览系统食谱、收藏心仪菜品、创建个人菜品笔记。
+- **蔬菜百科**：内置常见蔬菜/食材百科库，包含食材名称、分类、营养成分（热量、蛋白质、维生素等）、功效介绍、图片等，支持搜索与详情查看，帮助用户了解食材营养价值。
+- **社区论坛与敏感词过滤**：用户可发布帖子分享饮食心得、运动打卡、食谱推荐，支持富文本编辑、图片上传、嵌套回复、点赞收藏；内置敏感词过滤机制，支持自定义词库与 DFA/Trie 树高效匹配，发帖与评论提交前自动检测，违规内容自动拦截并推送人工审核。
+- **营养设定与个性化**：用户可设置个人营养目标（如每日热量上限、蛋白质摄入目标等），系统根据目标与实际摄入对比，给出饮食调整建议。
+- **待办任务与提醒**：用户可创建个人待办事项（如"明天买菜""预约体检""记录早餐"等），支持待办提醒与完成标记，帮助用户养成健康生活习惯。
+---
+
+## 适用场景
+
+- 个人健康饮食与运动管理
+- 校园/企业健康管理平台
+- 减脂增肌人群饮食监控
+- 营养师/健康管理师辅助工具
+- 健康饮食社区与知识分享
+---
+
+## 功能模块概览
+
+## 管理员端
+
+管理员为平台核心运营角色，负责全平台监管与内容维护：
+
+### 账号与基础
+
+- **管理员管理**：管理管理员账号，包括账号增删改查、角色分配、权限配置、登录日志查看，支持修改密码与安全设置。
+- **用户管理**：管理注册用户信息，包括昵称、头像、手机号、身高、体重、年龄、账户状态，支持账号冻结/解冻、违规用户处理。
+- **模块管理**：管理首页展示模块配置，包括轮播图上传编辑、热门食谱推荐设置、公告位管理、论坛热帖展示配置，支持模块排序与显隐控制。
+- **首页管理**：综合数据看板，展示核心平台指标（今日活跃用户/饮食记录数/运动打卡数/论坛发帖量），支持用户增长趋势、热门菜品排行、营养摄入分布等多维度图表展示。
+
+### 内容与社区
+
+- **公告管理**：发布与管理平台公告，包括公告标题、内容、类型（通知/活动/健康科普）、发布时间、置顶状态，支持公告编辑与删除。
+- **贴子管理**：管理社区论坛全部帖子，包括帖子标题、内容、发帖人、分类、发布时间、状态（待审核/已发布/已驳回/已删除），支持帖子审核、置顶、加精、删除操作。
+- **敏感词管理**：管理敏感词词库，支持敏感词增删改查、分类管理（如辱骂类、广告类、违禁类）、启用/禁用状态控制，敏感词更新后自动同步至过滤引擎。
+- **留言板**：查看用户提交的留言反馈，包括留言内容、留言人、留言时间、处理状态，支持管理员在线回复、标记已处理、删除无效留言。
+- **消息管理**：管理系统消息推送，包括消息标题、内容、接收对象、发送状态，支持批量发送系统通知。
+- **消息回复**：管理用户提交的咨询与反馈消息，支持管理员回复与消息记录查询。
+
+### 饮食与运动
+
+- **菜品管理**：管理全平台菜品信息，包括菜品名称、分类（早餐/午餐/晚餐/加餐/汤饮等）、食材、热量、营养元素（蛋白质/脂肪/碳水化合物/维生素等）、烹饪步骤、图片、描述、上架状态，支持菜品增删改查与批量操作。
+- **用户菜品**：查看用户创建的自定义菜品/做菜笔记，支持审核与违规内容处理。
+- **蔬菜百科**：管理蔬菜/食材百科库，包括食材名称、分类、营养成分、功效介绍、图片、描述，支持百科条目增删改查。
+- **饮食健康**：管理饮食健康相关知识文章，包括文章标题、内容、分类、发布时间、状态，支持健康科普内容运营。
+- **运动种类**：管理运动种类库，包括运动名称（跑步/游泳/瑜伽/健身/骑行等）、热量消耗系数、运动描述、适用人群，支持运动种类增删改查。
+- **营养设定**：管理营养标准参考值，包括不同人群（成人/儿童/老人/孕妇等）的每日推荐摄入量（热量/蛋白质/脂肪/碳水化合物/维生素/矿物质等），支持营养标准配置。
+
+### 数据与记录
+
+- **饮食记录**：查看全平台用户的饮食记录，包括用户、餐次、菜品、摄入量、营养数据、记录时间，支持按时间/用户筛选与数据统计。
+- **运动记录**：查看全平台用户的运动记录，包括用户、运动种类、时长、消耗卡路里、记录时间，支持按时间/用户筛选与数据统计。
+- **用户运动**：查看用户运动订阅与运动计划情况，支持运动数据分析。
+- **打卡记录**：查看全平台用户的打卡记录，包括打卡类型（饮食/运动）、打卡内容、打卡时间、连续打卡天数，支持打卡数据统计与活跃用户分析。
+- **代办任务**：查看用户创建的待办任务情况，支持待办完成率统计。
+- **数据统计**：综合数据看板，整合饮食、运动、打卡、社区等多维度数据，提供全局运营视图，支持自定义报表与数据导出（Excel）。
+
+## 用户端
+
+用户为平台的使用者，专注个人饮食与运动健康管理：
+
+### 账号与个人
+
+- **账户注册登录**：支持手机号+验证码注册登录、账号密码登录，支持找回密码，首次登录自动创建用户档案，支持填写身高、体重、年龄、性别等基础健康信息。
+- **密码修改**：支持用户自主修改登录密码，保障账户安全。
+- **个人信息**：查看与编辑个人基本信息，包括昵称、头像、手机号、身高、体重、年龄、健康目标（减脂/增肌/维持/控糖等），支持查看个人健康档案。
+
+### 饮食管理
+
+- **我的菜品**：管理个人创建的自定义菜品/做菜笔记，包括菜品名称、食材、做法、图片，支持新增、编辑、删除个人菜品。
+- **系统食谱**：浏览平台系统食谱库，支持按分类（早餐/午餐/晚餐/汤饮/素食等）、热量、口味筛选，查看食谱详情（食材、步骤、营养元素），支持收藏食谱。
+- **饮食记录**：记录每日饮食，包括选择餐次（早餐/午餐/晚餐/加餐）、选择菜品或手动输入、填写摄入量，系统自动计算热量与营养素，生成每日/每周营养摄入报告。
+- **营养设定**：设置个人营养目标，包括每日热量上限、蛋白质/脂肪/碳水化合物摄入目标，系统根据目标与实际摄入对比，给出饮食调整建议。
+
+### 运动管理
+
+- **运动订阅**：订阅感兴趣的运动种类，设置运动目标（如每周跑步3次、每次30分钟），系统根据订阅推送运动提醒与建议。
+- **运动记录**：记录每日运动，包括选择运动种类、填写运动时长，系统自动计算消耗卡路里，生成运动趋势图表。
+- **打卡记录**：查看个人打卡历史，包括饮食打卡与运动打卡，支持连续打卡天数统计，打卡日历可视化展示。
+
+### 互动与待办
+
+- **我的关注**：管理个人关注的用户或食谱，支持取消关注，关注对象有新动态时自动提醒。
+- **我的收藏**：管理个人收藏的食谱、帖子、食材百科，支持取消收藏。
+- **我的贴子**：管理个人在社区论坛发布的帖子，包括发帖（富文本编辑、图片上传）、编辑帖子、删除帖子、查看帖子回复与点赞数据。
+- **我的待办**：管理个人待办事项，包括待办标题、内容、截止时间、完成状态，支持新增、编辑、删除、标记完成待办。
+- **留言板**：向平台提交留言反馈（投诉、建议、咨询），查看管理员回复。
+- **系统消息**：查看个人收到的所有系统消息，包括打卡提醒、待办提醒、管理员回复、公告推送等，支持已读/未读管理。
+
+---
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
@@ -69,28 +165,28 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
+123456
+
+[用户]
+fank
+123456
 
 #### 项目截图
-暂无
-
 |  |  |
 |---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/7cf2ebad-9adb-4e94-81cd-da748bca5ec3.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/a68bce4f-bb3c-402c-8f2f-b55744377f73.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/7d8d4c54-43b1-482f-a412-8e28c9b1f758.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/b16df7a6-0753-48c7-862e-593a62850c5c.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/9d1a11e4-e169-4985-8cf7-5ea2d0ef12a2.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/bb6ce298-427e-4e20-9448-8b805c7e8f72.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/9f7bcd30-dd0e-43e3-9c21-272bfd9b2dd7.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/d655926f-226f-4992-8ee4-49b7cb219035.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/63d0c89f-a820-49f8-ab15-5428f1fb9437.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e04d4545-a0b3-4452-baf4-3e712c8d22d5.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/63e50c9f-fd90-40cd-a07d-bda92933d7ae.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e91a3e50-a949-4c82-aa52-2c67ee8841c4.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/82c8b9b1-a7a8-4ab1-beeb-c48712881b18.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/e96676eb-cdf6-4ca0-a826-e8ed12994aed.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/715acc33-946c-4c0f-89a5-39afa2863287.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/eb7e3ff2-a074-4a2b-a7d2-03b8150fd6e0.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/716c8b57-7e00-477a-8e19-4dece18ac2c0.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/0b8e8c61-5069-4538-923b-187e3457413a.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/21046c69-48ea-4cec-8ff6-b2fa4a06a85e.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1e06345d-482f-4636-8a90-b8b907a79643.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/92106fae-0427-466c-a43a-fe94418db042.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/02f84ffb-ca4c-46de-afe9-6b2a97c412af.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/50149802-8bb3-41ac-a717-7c5ffbb637bb.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/4c111944-a6ca-494f-bd61-1dc6f081b51d.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/77697668-2591-49b5-bb7a-605be1dcfde8.png) |  |
-
-![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png)
+| ![](./assets/image%20(1).png) | ![](./assets/image%20(2).png) |
+| ![](./assets/image%20(3).png) | ![](./assets/image%20(4).png) |
+| ![](./assets/image%20(5).png) | ![](./assets/image%20(6).png) |
+| ![](./assets/image%20(7).png) | ![](./assets/image%20(8).png) |
+| ![](./assets/image%20(9).png) | ![](./assets/image%20(10).png) |
+| ![](./assets/image%20(11).png) | ![](./assets/image%20(12).png) |
+| ![](./assets/image%20(13).png) | ![](./assets/image%20(14).png) |
+| ![](./assets/image%20(15).png) | ![](./assets/image%20(16).png) |
+| ![](./assets/image%20(17).png) | ![](./assets/image%20(18).png) |
+| ![](./assets/image%20(19).png) | ![](./assets/image%20(20).png) |
+| ![](./assets/image%20(21).png) | ![](./assets/image%20(22).png) |
+| ![](./assets/image%20(23).png) | ![](./assets/image%20(24).png) | 
+| ![](./assets/image%20(25).png) | 
 
 #### 演示视频
 
@@ -108,7 +204,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
+
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -132,4 +231,8 @@ WeChat: `Storm_Berserker`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
+
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**
